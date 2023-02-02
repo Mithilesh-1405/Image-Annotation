@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <style>
+        html{
+            margin: 10px;
+        }
+        .image-url {
+            width: 800px;
+        }
+        #container
+        {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="inputimages">
+        
+        <form method="POST" enctype="multipart/form-data" action="/upload/api/score-image">
+            <input type="file" id="myFile" name="uploaded-file" accept=".jpg" multiple>
+            <input type="submit" value="Submit">
+        </form>
+        
+       
+    </div>
+    <div id="container"></div>
+
+     
+    <script src="bundle.js"></script>
+</body>
+
+</html>
