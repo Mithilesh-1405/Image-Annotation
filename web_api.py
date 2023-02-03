@@ -142,7 +142,10 @@ def display():
         handle.write(img_filename,compress_type=zipfile.ZIP_DEFLATED)
     
     handle.close()
+    # variable=list1[2];    
+    # return render_template('res.html', len=len(list1),names=list1)
     return render_template('res.html',len=len(list1),images=list1,files=filelist)
+    # filename=encode_img_data.decode("UTF-8")
 
 
 @app.route('/download')
