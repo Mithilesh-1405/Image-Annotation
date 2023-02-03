@@ -1,0 +1,8 @@
+ {% if filename%}
+        <div>
+            <img src="data:image/jpeg;base64,{{filename}}">
+          <div>  
+
+        {%for i in range(0, len)%}
+            <li>{{names[i]}}</li>
+        {%endfor%} 

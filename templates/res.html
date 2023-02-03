@@ -1,11 +1,23 @@
-!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" href='/staticFiles/main.css' />
   </head>
   <body>
-    <h1>Upload and display image in Flask</h1>
     <p>Show image in html using FLASK</p>
-
+    <div>
+      {% if images%}
+        {%for i in range(0, len)%}
+            <div>
+              <img src="data:image/jpeg;base64,{{images[i]}}">
+              <br><br>
+            <div> 
+          {%endfor%} 
+        {% endif %}
+      <div>
+      <div>
+          <form method="GET" enctype="multipart/form-data" action="/download">
+            <input type="submit" value="Download">
+        </form>
+      </div>
   </body>
 </html>
