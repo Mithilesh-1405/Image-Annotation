@@ -1,7 +1,10 @@
 import flask
 from flask_cors import CORS
 from flask import request, jsonify,send_file
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session,redirect,url_for
+from PIL import Image
+import base64
+import io
 import os
 import skimage.io
 from werkzeug.utils import secure_filename
@@ -15,9 +18,10 @@ coco_metadata = MetadataCatalog.get("coco_2017_val")
 import cv2
 import requests
 import numpy as np
-import os
+import zipfile
 
-UPLOAD_FOLDER ="/Users/rohankurdekar/Downloads/MLMINIPROJ/detectron2/static/uploads"
+
+UPLOAD_FOLDER ="F:/Minor_web/detectron2-main/static"
 # # Define allowed files
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
  
@@ -53,7 +57,7 @@ def prepare_pridctor():
     cfg = get_cfg()
     add_pointrend_config(cfg)
     # below path applies to current installation location of Detectron2
-    cfg.merge_from_file("../detectron2/projects/PointRend/configs/InstanceSegmentation/pointrend_rcnn_R_50_FPN_3x_coco.yaml")
+    cfg.merge_from_file("F:/Minor_web/detectron2-main/projects/PointRend/configs/InstanceSegmentation/pointrend_rcnn_R_50_FPN_3x_coco.yaml")
 
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5  # set threshold for this model
     cfg.MODEL.WEIGHTS = "detectron2://PointRend/InstanceSegmentation/pointrend_rcnn_R_50_FPN_3x_coco/164955410/model_final_edd263.pkl"
@@ -97,7 +101,7 @@ def upload():
 
 @app.route("/upload/api/score-image", methods=["POST"])
 def custom():
-     if request.method == 'POST':
+    if request.method == 'POST':
          files = request.files.getlist("uploaded-file");
 
          for file in files:
@@ -114,22 +118,41 @@ def custom():
     # pred_masks=instances.get_fields()["pred_masks"].tensor.tolist()
              v = Visualizer(im[:, :, ::-1], coco_metadata, scale=1.2, instance_mode=ColorMode.IMAGE_BW)
              point_rend_result = v.draw_instance_predictions(scoring_result["instances"].to("cpu")).get_image()
-             os.chdir("/Users/rohankurdekar/Downloads/MLMINIPROJ/detectron2/static/uploads")
+             os.chdir("F:/Minor_web/detectron2-main/static")
              cv2.imwrite(img_filename,point_rend_result)
+        
+    return redirect(url_for("display"))
+    # return f"{img_filename}"
     
- 
-     return render_template('res.html')
              
-
+@app.route("/api/preview", methods=["GET"])
+def display():
+    # return f"<h1>Hello</h1>"
+    files=os.listdir(UPLOAD_FOLDER)
+    handle=zipfile.ZipFile('Annotation_output.zip','w')
+    filelist=[]
+    list1=[]
+    for img_filename in files:
+        img=Image.open(UPLOAD_FOLDER+"/"+img_filename)
+        data=io.BytesIO()
+        img.save(data,"JPEG")
+        filelist.append(img_filename)
+        encode_img_data = base64.b64encode(data.getvalue())
+        list1.append(encode_img_data.decode("UTF-8"))
+        handle.write(img_filename,compress_type=zipfile.ZIP_DEFLATED)
     
+    handle.close()
+    # variable=list1[2];    
+    # return render_template('res.html', len=len(list1),names=list1)
+    return render_template('res.html',len=len(list1),images=list1,files=filelist)
+    # filename=encode_img_data.decode("UTF-8")
 
-    
-   
 
+@app.route('/download')
+def output_file():
+    p="F:/Minor_web/detectron2-main/static/Annotation_output.zip"
+    return send_file(p,as_attachment=True)
 
-
-    
-   
 
 @app.route("/api/score-image", methods=["POST"])
 def process_score_image_request():
@@ -145,7 +168,7 @@ def process_score_image_request():
     # pred_masks=instances.get_fields()["pred_masks"].tensor.tolist()
     v = Visualizer(im[:, :, ::-1], coco_metadata, scale=1.2, instance_mode=ColorMode.IMAGE_BW)
     point_rend_result = v.draw_instance_predictions(scoring_result["instances"].to("cpu")).get_image()
-    os.chdir("/Users/rohankurdekar/Downloads/MLMINIPROJ/Annotation/uploads")
+    os.chdir("C:/Users/Manjunath/Downloads/uploads")
     cv2.imwrite("img.jpg",point_rend_result)
     cv2.imwrite("Image.jpg",point_rend_result)
     
