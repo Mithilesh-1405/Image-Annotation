@@ -21,7 +21,11 @@ import numpy as np
 import zipfile
 
 
-UPLOAD_FOLDER ="F:/Minor_web/detectron2-main/static"
+#for windows
+# UPLOAD_FOLDER ="F:/Minor_web/detectron2-main/static" 
+
+#for mac
+UPLOAD_FOLDER="/Users/rohankurdekar/Downloads/MLMINIPROJ/forkeddetecton/static"
 # # Define allowed files
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
  
@@ -57,8 +61,10 @@ def prepare_pridctor():
     cfg = get_cfg()
     add_pointrend_config(cfg)
     # below path applies to current installation location of Detectron2
-    cfg.merge_from_file("F:/Minor_web/detectron2-main/projects/PointRend/configs/InstanceSegmentation/pointrend_rcnn_R_50_FPN_3x_coco.yaml")
-
+    #For Windows
+    #cfg.merge_from_file("F:/Minor_web/detectron2-main/projects/PointRend/configs/InstanceSegmentation/pointrend_rcnn_R_50_FPN_3x_coco.yaml")
+    #For Mac
+    cfg.merge_from_file("/Users/rohankurdekar/Downloads/MLMINIPROJ/forkeddetecton/projects/PointRend/configs/InstanceSegmentation/pointrend_rcnn_R_50_FPN_3x_coco.yaml")
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5  # set threshold for this model
     cfg.MODEL.WEIGHTS = "detectron2://PointRend/InstanceSegmentation/pointrend_rcnn_R_50_FPN_3x_coco/164955410/model_final_edd263.pkl"
     cfg.MODEL.DEVICE = "cpu" # we use a CPU Detectron copy
@@ -117,17 +123,55 @@ def custom():
              pred_boxes = instances.get_fields()["pred_boxes"].tensor.tolist()
     # pred_masks=instances.get_fields()["pred_masks"].tensor.tolist()
              v = Visualizer(im[:, :, ::-1], coco_metadata, scale=1.2, instance_mode=ColorMode.IMAGE_BW)
-             point_rend_result = v.draw_instance_predictions(scoring_result["instances"].to("cpu")).get_image()
-             os.chdir("F:/Minor_web/detectron2-main/static")
+             point_rend_result = v.draw_instance_predictions(False,scoring_result["instances"].to("cpu")).get_image()
+             masked = v.draw_instance_predictions(True,scoring_result["instances"].to("cpu")).get_image()
+           
+           
+
+             os.chdir("/Users/rohankurdekar/Downloads/MLMINIPROJ/forkeddetecton/static/Box")
              cv2.imwrite(img_filename,point_rend_result)
+             #new = Visualizer(im[:, :, ::-1], coco_metadata, scale=1.2, instance_mode=ColorMode.IMAGE_BW)
+
+            # withmask= new.draw_instance_predictions(True,scoring_result["instances"].to("cpu")).get_image()
+             
+             os.chdir("/Users/rohankurdekar/Downloads/MLMINIPROJ/forkeddetecton/static/Mask")
+             cv2.imwrite(img_filename,masked)     
         
-    return redirect(url_for("display"))
+    # return redirect(url_for("display"))
+    return  render_template('test.html')
     # return f"{img_filename}"
     
-             
+@app.route("/api/choice",methods=["POST"])
+def choice():
+    option = request.form['options']
+    folder="/Users/rohankurdekar/Downloads/MLMINIPROJ/forkeddetecton/static/"+option;
+    files=os.listdir(folder)
+    os.chdir(folder)
+    handle=zipfile.ZipFile('Annotation_output.zip','w')
+    filelist=[]
+    list1=[]
+    for img_filename in files:
+        img=Image.open(folder+"/"+img_filename)
+        data=io.BytesIO()
+        img.save(data,"JPEG")
+        filelist.append(img_filename)
+        encode_img_data = base64.b64encode(data.getvalue())
+        list1.append(encode_img_data.decode("UTF-8"))
+        handle.write(img_filename,compress_type=zipfile.ZIP_DEFLATED)
+    
+    handle.close()
+    # variable=list1[2];    
+    # return render_template('res.html', len=len(list1),names=list1)
+    return render_template('res.html',len=len(list1),images=list1,files=filelist)
+    # filename=encode_img_data.decode("UTF-8")
+
+
+  
+
 @app.route("/api/preview", methods=["GET"])
 def display():
     # return f"<h1>Hello</h1>"
+
     files=os.listdir(UPLOAD_FOLDER)
     handle=zipfile.ZipFile('Annotation_output.zip','w')
     filelist=[]
@@ -150,7 +194,11 @@ def display():
 
 @app.route('/download')
 def output_file():
-    p="F:/Minor_web/detectron2-main/static/Annotation_output.zip"
+    #For Windows
+    # p="F:/Minor_web/detectron2-main/static/Annotation_output.zip"
+
+    #For mac
+    p="/Users/rohankurdekar/Downloads/MLMINIPROJ/forkeddetecton/static/Annotation_output.zip"
     return send_file(p,as_attachment=True)
 
 
@@ -158,7 +206,7 @@ def output_file():
 def process_score_image_request():
 
     image_url = request.json["imageUrl"]
-    im,scoring_result = score_image(predictor, image_url)
+    im,scoring_result = score_image(predictor,image_url)
 
     instances = scoring_result["instances"]
  
@@ -168,7 +216,12 @@ def process_score_image_request():
     # pred_masks=instances.get_fields()["pred_masks"].tensor.tolist()
     v = Visualizer(im[:, :, ::-1], coco_metadata, scale=1.2, instance_mode=ColorMode.IMAGE_BW)
     point_rend_result = v.draw_instance_predictions(scoring_result["instances"].to("cpu")).get_image()
-    os.chdir("C:/Users/Manjunath/Downloads/uploads")
+
+    #For Windows
+    # os.chdir("C:/Users/Manjunath/Downloads/uploads")
+
+    #For mac
+    os.chdir("/Users/rohankurdekar/Downloads/MLMINIPROJ/forkeddetecton/uploads")
     cv2.imwrite("img.jpg",point_rend_result)
     cv2.imwrite("Image.jpg",point_rend_result)
     
@@ -187,3 +240,5 @@ def process_score_image_request():
   
 
 app.run(host="0.0.0.0", port=3000)
+
+

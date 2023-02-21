@@ -354,7 +354,7 @@ class Visualizer:
 
     # TODO implement a fast, rasterized version using OpenCV
 
-    def __init__(self, img_rgb, metadata=None, scale=1.0, instance_mode=ColorMode.IMAGE):
+    def __init__(self, img_rgb, metadata=None, scale=1.0, instance_mode=ColorMode.IMAGE_BW):
         """
         Args:
             img_rgb: a numpy array of shape (H, W, C), where H and W correspond to
@@ -380,7 +380,7 @@ class Visualizer:
         self._instance_mode = instance_mode
         self.keypoint_threshold = _KEYPOINT_THRESHOLD
 
-    def draw_instance_predictions(self, predictions):
+    def draw_instance_predictions(self,check,predictions):
         """
         Draw instance-level prediction results on an image.
 
@@ -397,21 +397,22 @@ class Visualizer:
         classes = predictions.pred_classes.tolist() if predictions.has("pred_classes") else None
         labels = _create_text_labels(classes, scores, self.metadata.get("thing_classes", None))
         keypoints = predictions.pred_keypoints if predictions.has("pred_keypoints") else None
-
-        if predictions.has("pred_masks"):
+        
+        if predictions.has("pred_masks") and check==True:
             masks = np.asarray(predictions.pred_masks)
             masks = [GenericMask(x, self.output.height, self.output.width) for x in masks]
         else:
             masks = None
 
+
         if self._instance_mode == ColorMode.SEGMENTATION and self.metadata.get("thing_colors"):
             colors = [
                 self._jitter([x / 255 for x in self.metadata.thing_colors[c]]) for c in classes
             ]
-            alpha = 0.8
+            alpha =1
         else:
             colors = None
-            alpha = 0.5
+            alpha = 1
 
         if self._instance_mode == ColorMode.IMAGE_BW:
             self.output.reset_image(
@@ -421,8 +422,8 @@ class Visualizer:
                     else None
                 )
             )
-            alpha = 0.3
-
+            alpha = 1
+    
         self.overlay_instances(
             masks=masks,
             boxes=boxes,
@@ -430,7 +431,9 @@ class Visualizer:
             keypoints=keypoints,
             assigned_colors=colors,
             alpha=alpha,
-        )
+          )
+       
+           
         return self.output
 
     def draw_sem_seg(self, sem_seg, area_threshold=None, alpha=0.8):
