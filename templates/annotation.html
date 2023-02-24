@@ -1,0 +1,61 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='annotstyle.css')}}">
+   <!-- <script src="https://kit.fontawesome.com/1718a7b733.js" crossorigin="anonymous"></script> -->
+</head>
+<body>
+    <div class="title">
+        <div>
+            <a class="linktag"  href={{url_for('index')}}>Home</a>
+        </div>
+        <div class="heading">
+            <h1>
+                Image Annotation/Segmentation
+            </h1>
+        </div>
+        <div>
+            <a class="linktag"  href={{url_for('uploadimgkey')}}>Go to Keypoint</a>
+        </div>
+    </div>
+    <div class="main">
+        <!-- <div class="box annot">
+            <h3 class="subtitle">
+                
+            </h3>
+            <form method="POST" enctype="multipart/form-data" >
+                <input class="files" type="file" id="myFile" name="uploaded-file" accept=".jpg" multiple>
+                <input class="submit" type="submit" value="Submit">
+            </form>
+        </div> -->
+        <div class="column">
+            <div class="upload_button">
+                <h4 class="type">Select Images for Instance Segmentation</h4>
+                <form method="POST" enctype="multipart/form-data" action="/upload/api/score-image">
+                <!-- <i class="fa-solid fa-upload fa-2x"></i> -->
+                <input type="file" id="file-input" name="uploaded-file" accept=".jpg" onchange="preview()"
+                  multiple />
+                <label class="upl" for="file-input"> Upload </label>
+                <p id="num-of-files">No Files Chosen</p>
+                <div id="images">
+
+                    
+                </div>
+                <input id="subbtn" type="submit" value="Submit">
+              </form>
+            </div>
+          </div>
+        <!-- <div class="box keypoint">  
+            <h3 class="subtitle">
+                Select Images for Keypoint Detection
+            </h3>
+            <form method="POST" enctype="multipart/form-data" action="/upload/api/keypoint">
+                <input type="file" id="myFile" name="uploaded-file" accept=".jpg" multiple>
+                <input type="submit" value="Submit">
+            </form>
+        </div> -->
+        
+    </div>    
+    <script src="/static/script.js"></script>
+</body>
+
+</html>

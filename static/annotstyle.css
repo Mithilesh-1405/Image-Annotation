@@ -1,0 +1,145 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Trebuchet MS", Tahoma, sans-serif;
+    
+}
+
+
+body::-webkit-scrollbar {
+    width: 12px;
+    /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+    background:whitesmoke;
+    /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color:black;
+    /* color of the scroll thumb */
+    border-radius: 20px;
+    /* roundness of the scroll thumb */
+    border: 3px solid whitesmoke;
+    /* creates padding around scroll thumb */
+}
+
+div::-webkit-scrollbar{
+    width: 12px;
+}
+div::-webkit-scrollbar-track {
+    background:whitesmoke;
+    /* color of the tracking area */
+}
+div::-webkit-scrollbar-thumb {
+    background-color:black;
+    /* color of the scroll thumb */
+    border-radius: 20px;
+    /* roundness of the scroll thumb */
+    border: 3px solid whitesmoke;
+    /* creates padding around scroll thumb */
+}
+
+body{
+    background-color: #2c2f2d;
+}
+.column {
+    justify-content: center;
+    position: relative;
+    font-size: 25px;
+    font-weight: 500;
+}
+.fa-solid, .fas {
+    font-weight: 900;
+    color: #15202B;
+}
+.title{
+    display: flex;
+    text-align: center;
+    margin: 3rem;
+    color: #c1d1c6;
+}
+.back{
+
+    color: #6b52e5;
+}
+.keypt{
+
+    color: #6b52e5;
+}
+.heading{
+    margin-left: 7rem;
+    width: 100%;
+}
+.upload_button p {
+    text-align: center;
+    margin: 5px 0 30px 0;
+    font-size: 20px;
+    width: auto;
+    justify-content: center;
+    color: #2c2f2d;
+}
+.type{
+    text-align: center;
+}
+.upload_button {
+    background-color: rgb(185, 177, 188);
+    width: 80%;
+    margin-left: 9rem;
+    padding: 2rem 2rem;
+    border-radius: 1rem;
+    justify-content: center;
+}
+.upl {
+    display: block;
+    background-color:#15202B;
+    color: whitesmoke;
+    font-size: 25px;
+    text-align: center;
+    width: auto;
+    padding: 18px 0px;
+    margin: 20px 0 30px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    position: static;
+}
+input[type="file"] {
+    display: none;
+}
+figure {
+    width: 20rem;
+}
+
+img {
+    width: 100%;
+    height: 85%;
+}
+#images {
+    position: static;
+    margin: auto;
+    display: flex;
+    justify-content:space-around;
+    /* gap: 0.rem; */
+    flex-wrap: wrap;
+}
+#subbtn{
+    margin-top: -5px;
+    background-color:#15202B;
+    color:aliceblue;
+    width: fit-content;
+    text-align: center;
+    margin:auto;
+    border: none;
+    border-radius: 5px;
+    font-size: large;
+    font-weight: 100;
+    padding: 10px 12px 10px 12px;
+    cursor: pointer;
+}
+figcaption {
+    /* text-align: center; */
+    font-size: 2.4vmin;
+    /* margin-top: 0.5vmin; */
+    color: #15202B;
+}

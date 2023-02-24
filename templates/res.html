@@ -1,24 +1,29 @@
 <html lang="en">
 <head>
+      <!-- <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='style2.css')}}"> -->
+      <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='result.css')}}">
   </head>
   <body>
-    <p>Show image in html using FLASK</p>
-    <div>
-      {% if images%}
-        {%for i in range(0, len)%}
-            <div>
-              <img src="data:image/jpeg;base64,{{images[i]}}">
-              <br><br>
-            <div> 
-          {%endfor%} 
-        {% endif %}
-      <div>
-      <div>
-          <h2>{{opt}}</h2>
-          <form method="GET" enctype="multipart/form-data" action="/download{{opt}}">
-            
-            <input type="submit" value="Download">
+    <div class="main">
+         <h2>Choose Which Output to display</h2>
+          <form method="POST"  action="/api/choice">
+            <div class="flexdiv">
+                <div class="opt">
+                    <div class="inp">
+                        <input class="btn" type="radio" id="box" name="options" value="Box">
+                    </div>
+                    <label for="box">Boundary Box Output</label>
+                </div>
+                <div class="opt">
+                    <div class="inp">
+                        <input class="btn" type="radio" id="Mask" name="options" value="Mask">
+                    </div>
+                    <label for="Mask">Segmentation Output</label>
+                </div>   
+            </div>
+            <input class="submit" type="submit">
         </form>
       </div>
   </body>
+  
 </html>

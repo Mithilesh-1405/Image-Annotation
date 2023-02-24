@@ -21,8 +21,8 @@ import numpy as np
 import zipfile
 
 #for windows
-UPLOAD_FOLDER_ANOT ="F:/Minor_web/detectron2-main/static/annotation"
-UPLOAD_FOLDER_KEY ="F:/Minor_web/detectron2-main/static/keypoint"
+UPLOAD_FOLDER_ANOT ="F:/Minor_web/detectron2/static/annotation"
+UPLOAD_FOLDER_KEY ="F:/Minor_web/detectron2/static/keypoint"
 
 #for mac
 # UPLOAD_FOLDER="/Users/rohankurdekar/Downloads/MLMINIPROJ/forkeddetecton/static"
@@ -62,7 +62,7 @@ def prepare_pridctor():
     add_pointrend_config(cfg)
     # below path applies to current installation location of Detectron2
     #For Windows
-    cfg.merge_from_file("F:/Minor_web/detectron2-main/projects/PointRend/configs/InstanceSegmentation/pointrend_rcnn_R_50_FPN_3x_coco.yaml")
+    cfg.merge_from_file("F:/Minor_web/detectron2/projects/PointRend/configs/InstanceSegmentation/pointrend_rcnn_R_50_FPN_3x_coco.yaml")
 
     #For Mac
     # cfg.merge_from_file("/Users/rohankurdekar/Downloads/MLMINIPROJ/forkeddetecton/projects/PointRend/configs/InstanceSegmentation/pointrend_rcnn_R_50_FPN_3x_coco.yaml")
@@ -86,6 +86,15 @@ predictor, classes = prepare_pridctor()
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/uploadanot')
+def uploadimganot():
+    return render_template('annotation.html')
+
+@app.route('/uploadkeypoint')
+def uploadimgkey():
+    return render_template('keypoint.html')
+
 @app.route('/upload', methods=['POST'])
 def upload():
     if request.method == 'POST':
@@ -120,14 +129,14 @@ def keypoint():
             uploaded_img.save(os.path.join(UPLOAD_FOLDER_KEY, img_filename))
             im=skimage.io.imread(os.path.join(UPLOAD_FOLDER_KEY, img_filename))
             cfg = get_cfg()   # get a fresh new config
-            cfg.merge_from_file("F:/Minor_web/detectron2-main/configs/COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml")
+            cfg.merge_from_file("F:/Minor_web/detectron2/configs/COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x.yaml")
             cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7  # set threshold for this model
-            cfg.MODEL.WEIGHTS = "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+            cfg.MODEL.WEIGHTS = "detectron2://COCO-Keypoints/keypoint_rcnn_R_50_FPN_3x/137849621/model_final_a6e10b.pkl"
             cfg.MODEL.DEVICE = "cpu" 
             predictor = DefaultPredictor(cfg)
             outputs = predictor(im)
             v = Visualizer(im[:,:,::-1], MetadataCatalog.get(cfg.DATASETS.TRAIN[0]), scale=1.2)
-            out = v.draw_instance_predictions(outputs["instances"].to("cpu")).get_image()
+            out = v.custom_draw_instance_predictions(outputs["instances"].to("cpu")).get_image()
             os.chdir(UPLOAD_FOLDER_KEY)
             cv2.imwrite(img_filename,out)
              
@@ -142,6 +151,7 @@ def custom():
 
          for file in files:
              uploaded_img = file
+             print(file)
              img_filename = secure_filename(uploaded_img.filename)
              uploaded_img.save(os.path.join(UPLOAD_FOLDER_ANOT+"/Original", img_filename))
              read=skimage.io.imread(os.path.join(UPLOAD_FOLDER_ANOT+"/Original", img_filename))
@@ -170,7 +180,7 @@ def custom():
              cv2.imwrite(img_filename,masked)     
         
     # return redirect(url_for("display"))
-    return  render_template('test.html')
+    return  render_template('res.html')
     # return f"{img_filename}"
     
 # @app.route('/download')
@@ -207,7 +217,8 @@ def makeZip(option):
 @app.route("/api/choice",methods=["POST"])
 def choice():
     option = request.form['options']
-    # print(option)
+    print(option)
+    
     folder=UPLOAD_FOLDER_ANOT+"/"+option; #path
     # print(folder)
     files=os.listdir(folder) #Files in the path
@@ -229,48 +240,47 @@ def choice():
     # handle.close()
     # variable=list1[2];    
     # return render_template('res.html', len=len(list1),names=list1)
-    return render_template('res.html',len=len(list1),images=list1,files=filelist,opt=option)
+    return render_template('resultdisplay.html',len=len(list1),images=list1,files=filelist,opt=option)
     # filename=encode_img_data.decode("UTF-8")
 
 
   
 
-# @app.route("/api/preview", methods=["GET"])
-# def display():
-#     # return f"<h1>Hello</h1>"
+@app.route("/api/preview", methods=["GET"])
+def display():
+    # return f"<h1>Hello</h1>"
 
-#     files=os.listdir(UPLOAD_FOLDER_ANOT)
-#     handle=zipfile.ZipFile('Annotation_output.zip','w')
-#     filelist=[]
-#     list1=[]
+    files=os.listdir(UPLOAD_FOLDER_KEY)
+    # handle=zipfile.ZipFile('Annotation_output.zip','w')
+    filelist=[]
+    list1=[]
     
-#     for img_filename in files:
-#         img=Image.open(UPLOAD_FOLDER_ANOT+"/"+img_filename)
-#         data=io.BytesIO()
-#         img.save(data,"JPEG")
-#         filelist.append(img_filename)
-#         encode_img_data = base64.b64encode(data.getvalue())
-#         list1.append(encode_img_data.decode("UTF-8"))
-#         handle.write(img_filename,compress_type=zipfile.ZIP_DEFLATED)
+    for img_filename in files:
+        img=Image.open(UPLOAD_FOLDER_KEY+"/"+img_filename)
+        data=io.BytesIO()
+        img.save(data,"JPEG")
+        filelist.append(img_filename)
+        encode_img_data = base64.b64encode(data.getvalue())
+        list1.append(encode_img_data.decode("UTF-8"))
+        # handle.write(img_filename,compress_type=zipfile.ZIP_DEFLATED)
     
-#     handle.close()
-#     # variable=list1[2];    
-#     # return render_template('res.html', len=len(list1),names=list1)
-#     return render_template('res.html',len=len(list1),images=list1,files=filelist)
-#     # filename=encode_img_data.decode("UTF-8")
+    # handle.close()
+    # variable=list1[2];    
+    # return render_template('res.html', len=len(list1),names=list1)
+    return render_template('resultdisplay.html',len=len(list1),images=list1,files=filelist)
+    # filename=encode_img_data.decode("UTF-8")
 
 
-# @app.route('/downloadKey')
-# def keyPoint_download():
-#     p=UPLOAD_FOLDER_KEY+"/keypoint_output.zip"
-#     return send_file(p,as_attachment=True)
+@app.route('/downloadBox')
+def Annotation_Box():
+    p=UPLOAD_FOLDER_ANOT+"/Box/Annotation_Box.zip"
+    return send_file(p,as_attachment=True)
 
 
-
-# @app.route('/downloadMask')
-# def Annotation_Mask():
-#     p=UPLOAD_FOLDER_ANOT+"/Mask/Annotation_Mask.zip"
-#     return send_file(p,as_attachment=True)
+@app.route('/downloadMask')
+def Annotation_Mask():
+    p=UPLOAD_FOLDER_ANOT+"/Mask/Annotation_Mask.zip"
+    return send_file(p,as_attachment=True)
 
 # @app.route("/api/score-image", methods=["POST"])
 # def process_score_image_request():

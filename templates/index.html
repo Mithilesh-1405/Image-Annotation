@@ -1,35 +1,80 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <style>
-        html{
-            margin: 10px;
-        }
-        .image-url {
-            width: 800px;
-        }
-        #container
-        {
-            margin-top: 10px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MainPage</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='indexstyle.css')}}">
 </head>
-
 <body>
-
-    <div class="inputimages">
-        
-        <form method="POST" enctype="multipart/form-data" action="/upload/api/score-image">
-            <input type="file" id="myFile" name="uploaded-file" accept=".jpg" multiple>
-            <input type="submit" value="Submit">
-        </form>
-        
-       
+    <div class="title">
+        <!-- <img class="titleimg" src="./pattern.jpg" alt="Pattern"> -->
+        <div class="text">
+            <h2>Image Annotation</h2>
+        </div>
     </div>
-    <div id="container"></div>
-
-     
-    <script src="bundle.js"></script>
+    <div class="main">
+        <div class=" box upper">
+            <h2 class="upptxt">Effortlessly Organize Your Visual World with Intelligent Image Classification</h2>
+        </div>
+        <div class="box mid">
+    
+        </div>
+        <div class="box mid-1">
+    
+        </div>
+        <div class="box lower">
+    
+        </div>
+        <div class="inside">
+            <div class="overlap">
+                <div class="boxol">
+                    <img class="img boundarybox" src="/static/bbox.jpg" alt="Boundary Box Image">
+                    <div class="info">
+                        <h2 class="heading">Bounday Box Detection</h2>
+                        <p>
+                            Bounding boxes are often used in object detection algorithms, where the goal is to identify all objects in an image and draw a box around each one. 
+                        </p>
+                        <p>
+                            They can also be used for tracking objects over time in video data.
+                        </p>
+                        <p class="link">Upload images for Boundary Box Detection</p>
+                        <a class="linktag"  href={{url_for('uploadimganot')}}>Upload Images</a>
+                    </div>
+                </div>
+                <div class="boxol">
+                    <div class="image">
+                        <img class="img" src="/static/mask.png" alt="Instance Segmentation Image">
+                    </div>
+                    <div class="info">
+                        <h2 class="heading">Instance Segmentation</h2>
+                        <p>
+                            Instance Segmentation is a special form of image segmentation that deals with detecting instances of objects and demarcating their boundaries. 
+                        <p>
+                            It finds large-scale applicability in real-world scenarios like self-driving cars, medical imaging, aerial crop monitoring, and more.
+                        </p>
+                        <p class="link">Upload images for Instance Segmentation</p>
+                        <a class="linktag"  href={{url_for('uploadimganot')}}>Upload Images</a>
+                    </div>
+                </div>
+                <div class="boxol">
+                    <img class="img" src="/static/keypoint.jpg" alt="Keypoint Image">
+                    <div class="info">
+                        <h2 class="heading">Keypoint Detection</h2>
+                        <p>
+                            Keypoint detection is a popular computer vision technique for locating key object parts in an image. 
+                        </p>
+                        <p>
+                           It defines spatial locations or points that stand out in an image, like key parts of our faces (nose tip, eyebrow, lips) or key points of our body (joints, hips, elbow).
+                        </p>
+                        <p class="link">Upload images for Keypoint Detection</p>
+                        <a class="linktag"  href={{url_for('uploadimgkey')}}>Upload Images</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
 </body>
-
 </html>

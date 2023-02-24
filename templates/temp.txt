@@ -1,8 +1,64 @@
- {% if filename%}
-        <div>
-            <img src="data:image/jpeg;base64,{{filename}}">
-          <div>  
+body{
+  margin: 0 5rem;
+  background-color: #28282B ;
+}
+.title{
+  text-align: center;
+  color: white;
+}
+.files,.submit{
+  color: whitesmoke;
+  background-color: #28282B ;
+}
 
-        {%for i in range(0, len)%}
-            <li>{{names[i]}}</li>
-        {%endfor%} 
+.main{
+     display: flex;
+}
+.box{
+     margin:2rem;
+     width: 50%;
+     /* border: 2rem solid rgb(29, 29, 50); */
+     padding: 1rem;
+     text-align: center;
+     background-color: white;
+     color: #28282B ;
+     border-radius: 2rem;
+     /* box-shadow: 0.2rem 0.2rem 0.3rem b; */
+}
+.subtitle{
+     margin: 2rem 0.5rem;
+}
+
+
+
+
+
+
+
+
+<div class="title">
+  <h1>
+      Image Annotation and Keypoint Detection Tool
+  </h1>
+</div>
+<div class="main">
+  <div class="box annot">
+      <h3 class="subtitle">
+          Select Images for Instance Segmentation
+      </h3>
+      <form method="POST" enctype="multipart/form-data" action="/upload/api/score-image">
+          <input class="files" type="file" id="myFile" name="uploaded-file" accept=".jpg" multiple>
+          <input class="submit" type="submit" value="Submit">
+      </form>
+  </div>
+  
+  <div class="box keypoint">  
+      <h3 class="subtitle">
+          Select Images for Keypoint Detection
+      </h3>
+      <form method="POST" enctype="multipart/form-data" action="/upload/api/keypoint">
+          <input type="file" id="myFile" name="uploaded-file" accept=".jpg" multiple>
+          <input type="submit" value="Submit">
+      </form>
+  </div>
+</div> 

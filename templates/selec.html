@@ -1,0 +1,36 @@
+<html>
+    <link rel="stylesheet" href="{{url_for('static',filename='style1.css')}}"
+<head>
+    <style>
+        html{
+            margin: 10px;
+        }
+        .image-url {
+            width: 800px;
+        }
+        #container
+        {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="main">
+    <div class="inputimages">
+        <form method="POST" enctype="multipart/form-data" action="/upload/api/score-image">
+            <input type="file" id="myFile" name="uploaded-file" accept=".jpg" multiple>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <div class="inputimages">
+        <form method="POST" enctype="multipart/form-data" action="/upload/api/keypoint">
+            <input type="file" id="myFile" name="uploaded-file" accept="image/*" multiple>
+            <input type="submit" value="Submit">
+        </form> 
+    </div>
+</div>    
+   
+</body>
+
+</html>
