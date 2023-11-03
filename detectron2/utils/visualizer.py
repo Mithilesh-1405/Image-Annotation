@@ -1,4 +1,5 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
+from csv import writer
 import colorsys
 import logging
 import math
@@ -397,6 +398,9 @@ class Visualizer:
         classes = predictions.pred_classes.tolist() if predictions.has("pred_classes") else None
         labels = _create_text_labels(classes, scores, self.metadata.get("thing_classes", None))
         keypoints = predictions.pred_keypoints if predictions.has("pred_keypoints") else None
+        # keypoints = self._convert_keypoints(keypoints)
+        # print(keypoints)
+    
         
         if predictions.has("pred_masks"):
             masks = np.asarray(predictions.pred_masks)
@@ -454,6 +458,8 @@ class Visualizer:
         labels = _create_text_labels(classes, scores, self.metadata.get("thing_classes", None))
         keypoints = predictions.pred_keypoints if predictions.has("pred_keypoints") else None
         
+        
+    
         if predictions.has("pred_masks") and check==True:
             masks = np.asarray(predictions.pred_masks)
             masks = [GenericMask(x, self.output.height, self.output.width) for x in masks]
@@ -800,6 +806,8 @@ class Visualizer:
 
         # draw keypoints
         if keypoints is not None:
+            print("New")
+            print(len(keypoints))
             for keypoints_per_instance in keypoints:
                 self.draw_and_connect_keypoints(keypoints_per_instance)
 
@@ -857,19 +865,48 @@ class Visualizer:
             output (VisImage): image object with visualizations.
         """
         visible = {}
+       
         keypoint_names = self.metadata.get("keypoint_names")
+        # print(len(keypoints))
+
+        
         for idx, keypoint in enumerate(keypoints):
 
             # draw keypoint
             x, y, prob = keypoint
+            # print(x,y,prob)
+            # print(keypoint_names[idx])
             if prob > self.keypoint_threshold:
                 self.draw_circle((x, y), color=_RED)
                 if keypoint_names:
                     keypoint_name = keypoint_names[idx]
                     visible[keypoint_name] = (x, y)
+        print("new")
+        lists=[]
+        for key in visible:
+        
+            # print(visible[key])
+            lists.append(visible[key])
+        for i in range(0, len(lists)):
+            print(lists[i])
+        with open('F:/Minor_web/detectron2/Python.csv', 'a') as csvfile:
+             writer_object = writer(csvfile)
+             writer_object.writerow(lists)
+             csvfile.close()
+
+
+
+     
+
+        
+        
+        
+                    
+        
 
         if self.metadata.get("keypoint_connection_rules"):
             for kp0, kp1, color in self.metadata.keypoint_connection_rules:
+                # print(kp0,kp1,color)
                 if kp0 in visible and kp1 in visible:
                     x0, y0 = visible[kp0]
                     x1, y1 = visible[kp1]

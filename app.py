@@ -19,7 +19,8 @@ import cv2
 import requests
 import numpy as np
 import zipfile
-
+import csv
+  
 #for windows
 UPLOAD_FOLDER_ANOT ="F:/Minor_web/detectron2/static/annotation"
 UPLOAD_FOLDER_KEY ="F:/Minor_web/detectron2/static/keypoint"
@@ -120,8 +121,14 @@ def upload():
 @app.route("/upload/api/score-image/keypoint", methods=["POST"])
 def keypoint():
         if request.method == 'POST':
-            files = request.files.getlist("uploaded-file");
+            files = request.files.getlist("uploaded-file")
+        
+        with open('Python.csv', 'w') as csvfile:  
 
+          fieldnames = ['nose', 'left_eye', 'right_eye','left_ear','right_ear','left_shoulder','right_shoulder','left_elbow','right_elbow','left_wrist','right_wrist','left_hip','right_hip','left_knee','right_knee','left_ankle','right_ankle']    
+          writer = csv.DictWriter(csvfile, fieldnames=fieldnames) 
+          writer.writeheader()  
+          csvfile.close()
 
         for file in files:
             uploaded_img = file
@@ -251,7 +258,7 @@ def display():
     # return f"<h1>Hello</h1>"
 
     files=os.listdir(UPLOAD_FOLDER_KEY)
-    # handle=zipfile.ZipFile('Annotation_output.zip','w')
+    # handle=zipfile.ZipFile('keypoint_op.zip','w')
     filelist=[]
     list1=[]
     
@@ -262,6 +269,7 @@ def display():
         filelist.append(img_filename)
         encode_img_data = base64.b64encode(data.getvalue())
         list1.append(encode_img_data.decode("UTF-8"))
+        print(encode_img_data);
         # handle.write(img_filename,compress_type=zipfile.ZIP_DEFLATED)
     
     # handle.close()
@@ -281,6 +289,12 @@ def Annotation_Box():
 def Annotation_Mask():
     p=UPLOAD_FOLDER_ANOT+"/Mask/Annotation_Mask.zip"
     return send_file(p,as_attachment=True)
+
+
+# @app.route('/downloadkey')
+# def key_download():
+#     p=UPLOAD_FOLDER_KEY+"/keypoint_op.zip"
+#     return send_file(p,as_attachment=True)
 
 # @app.route("/api/score-image", methods=["POST"])
 # def process_score_image_request():

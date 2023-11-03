@@ -137,6 +137,9 @@ img {
     padding: 10px 12px 10px 12px;
     cursor: pointer;
 }
+.linktag{
+    color: whitesmoke;
+}
 figcaption {
     /* text-align: center; */
     font-size: 2.4vmin;

@@ -29,7 +29,11 @@ body{
      margin: 2rem 0.5rem;
 }
 
-
+{% comment %} <div class="dload">
+      <form method="GET" enctype="multipart/form-data" action="/download{{opt}}">
+      <input class="submit" type="submit" value="Download">
+    </form>
+  </div> {% endcomment %}
 
 
 
