@@ -16,10 +16,10 @@ Furthermore, manually annotating images to create datasets for depth sensing mod
 ## Proposed Solution
 To address the challenges of depth sensing in mobile cameras, we propose developing a machine learning-based web application for automated image annotation and depth sensing enhancement. The solution will involve:
 
-1) Automated Annotation Tool: The platform will provide automated annotation of images by leveraging image processing techniques and pre-trained machine learning models. This will significantly reduce the time and effort required for manual annotations and ensure consistency in the dataset.\
-2) Depth Sensing Model: A custom depth sensing algorithm will be developed or enhanced using deep learning techniques like convolutional neural networks (CNNs). The model will analyze annotated images and generate more precise depth maps, capable of handling challenging conditions such as varying lighting and complex object environments.\
-3) Web-based Interface: The annotation tool will be hosted as a web app, allowing remote teams to collaborate and upload images for automatic annotation. The output data will be used to train depth-sensing models that can be integrated into mobile devices.\
-4) Scalability: The application will be designed to process large volumes of images efficiently, ensuring it can scale as needed to generate comprehensive datasets for training depth sensing models.\
+1) Automated Annotation Tool: The platform will provide automated annotation of images by leveraging image processing techniques and pre-trained machine learning models. This will significantly reduce the time and effort required for manual annotations and ensure consistency in the dataset.
+2) Depth Sensing Model: A custom depth sensing algorithm will be developed or enhanced using deep learning techniques like convolutional neural networks (CNNs). The model will analyze annotated images and generate more precise depth maps, capable of handling challenging conditions such as varying lighting and complex object environments.
+3) Web-based Interface: The annotation tool will be hosted as a web app, allowing remote teams to collaborate and upload images for automatic annotation. The output data will be used to train depth-sensing models that can be integrated into mobile devices.
+4) Scalability: The application will be designed to process large volumes of images efficiently, ensuring it can scale as needed to generate comprehensive datasets for training depth sensing models.
 
 By automating the annotation process and improving depth sensing accuracy, this solution will enhance the depth-sensing capabilities of mobile cameras, leading to better performance in applications such as portrait photography, AR experiences, and real-time object detection.
 
