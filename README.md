@@ -11,7 +11,7 @@ Furthermore, manually annotating images to create datasets for depth sensing mod
 2). Enhance Depth Sensing Accuracy\
 3). Create Scalable Annotation Pipelines\
 4). Facilitate Machine Learning Model Training\
-5). Integrate with Mobile Camera Systems\
+5). Integrate with Mobile Camera Systems
 
 ## Proposed Solution
 To address the challenges of depth sensing in mobile cameras, we propose developing a machine learning-based web application for automated image annotation and depth sensing enhancement. The solution will involve:
